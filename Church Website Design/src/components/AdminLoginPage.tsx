@@ -40,7 +40,7 @@ export function AdminLoginPage({ onNavigate, onLogin }: AdminLoginPageProps) {
         toast.success('Login successful!');
         onLogin();
         if (onNavigate) {
-          onNavigate('admin-volunteers');
+          onNavigate('temporary-dashboard');
         }
       } else {
         toast.error('Incorrect password. Please try again.');

@@ -5,6 +5,7 @@ import { saveVolunteerApplication, getAllVolunteerApplications, sendEmailNotific
 import { createSermon, getAllSermons, getSermonById, updateSermon, deleteSermon, initializeSermonBucket } from './sermon-handler.tsx';
 import { createResource, getAllResources, getResourceById, updateResource, deleteResource, initializeResourceBucket, incrementDownloadCount } from './resource-handler.tsx';
 import { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent, getUpcomingEvents } from './event-handler.tsx';
+import homepageEventHandler from './homepage-event-handler.tsx';
 import * as kv from './kv_store.tsx';
 
 const app = new Hono();
@@ -338,6 +339,67 @@ app.delete('/make-server-9f158f76/events/:id', async (c) => {
   } catch (error) {
     console.error('Error deleting event:', error);
     return c.json({ error: 'Failed to delete event', details: error.message }, 500);
+  }
+});
+
+// ===== HOMEPAGE EVENT ROUTES =====
+app.route('/make-server-9f158f76/homepage-event', homepageEventHandler);
+
+// ===== LIVE STREAM ROUTES =====
+// Get live stream data
+app.get('/make-server-9f158f76/live-stream/get', async (c) => {
+  try {
+    const liveStreamData = await kv.get('live_stream_settings');
+    
+    const defaultData = {
+      isLive: false,
+      youtubeUrl: '',
+      scheduleText: 'Check back soon for our next live service!'
+    };
+    
+    return c.json({
+      success: true,
+      data: liveStreamData || defaultData
+    });
+  } catch (error) {
+    console.error('Error fetching live stream data:', error);
+    return c.json({ 
+      success: false, 
+      error: 'Failed to fetch live stream data' 
+    }, 500);
+  }
+});
+
+// Update live stream data
+app.post('/make-server-9f158f76/live-stream/update', async (c) => {
+  try {
+    const data = await c.req.json();
+    
+    // Validate data
+    if (typeof data.isLive !== 'boolean') {
+      return c.json({ error: 'Invalid isLive value' }, 400);
+    }
+    
+    const liveStreamData = {
+      isLive: data.isLive,
+      youtubeUrl: data.youtubeUrl || '',
+      scheduleText: data.scheduleText || 'Check back soon for our next live service!',
+      updatedAt: new Date().toISOString()
+    };
+    
+    await kv.set('live_stream_settings', liveStreamData);
+    
+    return c.json({
+      success: true,
+      message: 'Live stream settings updated successfully',
+      data: liveStreamData
+    });
+  } catch (error) {
+    console.error('Error updating live stream data:', error);
+    return c.json({ 
+      success: false, 
+      error: 'Failed to update live stream data' 
+    }, 500);
   }
 });
 

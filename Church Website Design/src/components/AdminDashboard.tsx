@@ -15,13 +15,17 @@ import {
   Download,
   RefreshCw,
   Loader2,
-  Video
+  Video,
+  Home,
+  Radio
 } from 'lucide-react';
 import { AdminVolunteersPage } from './AdminVolunteersPage';
 import { SetupInstructionsPage } from './SetupInstructionsPage';
 import { AdminSermonsPage } from './AdminSermonsPage';
 import { AdminResourcesPage } from './AdminResourcesPage';
 import { AdminEventsPage } from './AdminEventsPage';
+import { AdminHomepageEventPage } from './AdminHomepageEventPage';
+import { AdminLiveStreamPage } from './AdminLiveStreamPage';
 import { ChangePasswordModal } from './ChangePasswordModal';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { toast } from 'sonner@2.0.3';
@@ -40,6 +44,13 @@ export function AdminDashboard({ onNavigate, onLogout }: AdminDashboardProps) {
   });
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [forceReset, setForceReset] = useState(0);
+
+  // Reset to overview when component mounts or forceReset changes
+  useEffect(() => {
+    setActiveSection('overview');
+    setForceReset(Date.now());
+  }, []);
 
   // Fetch statistics
   useEffect(() => {
@@ -101,6 +112,8 @@ export function AdminDashboard({ onNavigate, onLogout }: AdminDashboardProps) {
 
   const navigationItems = [
     { id: 'overview', label: 'Dashboard Overview', icon: LayoutDashboard },
+    { id: 'homepage-events', label: 'Homepage Event', icon: Home },
+    { id: 'live-stream', label: 'Live Stream', icon: Radio },
     { id: 'volunteers', label: 'Volunteer Applications', icon: Users },
     { id: 'setup', label: 'Setup Instructions', icon: Settings },
     { id: 'sermons', label: 'Sermons', icon: Video },
@@ -128,6 +141,14 @@ export function AdminDashboard({ onNavigate, onLogout }: AdminDashboardProps) {
 
     if (activeSection === 'events') {
       return <AdminEventsPage onNavigate={onNavigate} onLogout={onLogout} />;
+    }
+
+    if (activeSection === 'homepage-events') {
+      return <AdminHomepageEventPage onNavigate={onNavigate} onLogout={onLogout} />;
+    }
+
+    if (activeSection === 'live-stream') {
+      return <AdminLiveStreamPage onNavigate={onNavigate} onLogout={onLogout} />;
     }
 
     // Overview Dashboard
@@ -239,6 +260,28 @@ export function AdminDashboard({ onNavigate, onLogout }: AdminDashboardProps) {
                     </h3>
                     <p className="text-gray-600 font-['Merriweather'] text-sm">
                       Manage and review all volunteer submissions
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-[var(--wine)] transition-colors" />
+              </div>
+            </Card>
+
+            <Card
+              className="p-6 hover:shadow-lg transition-all cursor-pointer rounded-2xl group"
+              onClick={() => setActiveSection('homepage-events')}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center group-hover:bg-orange-600 transition-colors">
+                    <Home className="w-6 h-6 text-orange-600 group-hover:text-white transition-colors" />
+                  </div>
+                  <div>
+                    <h3 className="font-['Montserrat'] text-lg text-[var(--wine)] mb-1">
+                      Homepage Event Card
+                    </h3>
+                    <p className="text-gray-600 font-['Merriweather'] text-sm">
+                      Update the featured event on the homepage
                     </p>
                   </div>
                 </div>

@@ -21,6 +21,7 @@ import churchLogo from 'figma:asset/a02d98e1848270468d8689a4d10185e04425697c.png
 import { VideoPlayerModal } from './VideoPlayerModal';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { toast } from 'sonner';
+import { LiveStreamBanner } from './LiveStreamBanner';
 
 interface HomePageProps {
   onNavigate?: (page: string) => void;
@@ -44,10 +45,40 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const [selectedSermon, setSelectedSermon] = React.useState<Sermon | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [videoLoaded, setVideoLoaded] = React.useState(false);
+  const [homepageEvent, setHomepageEvent] = React.useState({
+    title: 'Annual Thanksgiving Service 2024',
+    description: 'Join us for a special time of worship, thanksgiving, and testimonies as we celebrate God\'s goodness and faithfulness throughout the year.',
+    date: 'December 15, 2024',
+    time: '8:00 AM - 2:00 PM',
+  });
 
   React.useEffect(() => {
     fetchSermons();
+    fetchHomepageEvent();
   }, []);
+
+  const fetchHomepageEvent = async () => {
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-9f158f76/homepage-event`,
+        {
+          headers: { Authorization: `Bearer ${publicAnonKey}` },
+        }
+      );
+
+      if (!response.ok) {
+        // Silently fail - this is expected when backend is not deployed
+        return;
+      }
+
+      const data = await response.json();
+      if (data.event) {
+        setHomepageEvent(data.event);
+      }
+    } catch (error) {
+      // Silently fail - this is expected when backend is not deployed
+    }
+  };
 
   const fetchSermons = async () => {
     try {
@@ -59,7 +90,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       );
 
       if (!response.ok) {
-        console.warn('Sermon service unavailable, using placeholder sermons');
+        // Silently fail - this is expected when backend is not deployed
         setSermons([]);
         return;
       }
@@ -68,8 +99,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       // Get only the first 3 sermons for the homepage
       setSermons((data.sermons || []).slice(0, 3));
     } catch (error) {
-      console.warn('Could not connect to sermon service, this is normal if the backend is not yet deployed');
-      // Silently fail and show placeholder sermons
+      // Silently fail - this is expected when backend is not deployed
       setSermons([]);
     }
   };
@@ -161,6 +191,9 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
+      {/* Live Stream Banner */}
+      <LiveStreamBanner onNavigate={onNavigate} />
+
       {/* Upcoming Event Section */}
       <section className="py-16 bg-[var(--wine)] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -177,16 +210,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
                   </span>
                 </div>
                 <h2 className="font-['Montserrat'] text-3xl md:text-4xl mb-4">
-                  Annual Thanksgiving Service 2024
+                  {homepageEvent.title}
                 </h2>
                 <p className="text-white/80 font-['Merriweather'] mb-4 text-lg">
-                  Join us for a special time of worship, thanksgiving, and testimonies as we celebrate
-                  God's goodness and faithfulness throughout the year.
+                  {homepageEvent.description}
                 </p>
                 <div className="flex items-center gap-4 text-white/90">
-                  <span className="font-['Montserrat']">December 15, 2024</span>
+                  <span className="font-['Montserrat']">{homepageEvent.date}</span>
                   <span>•</span>
-                  <span className="font-['Montserrat']">8:00 AM - 2:00 PM</span>
+                  <span className="font-['Montserrat']">{homepageEvent.time}</span>
                 </div>
               </div>
               <Button className="bg-[var(--gold)] text-[var(--wine-dark)] hover:bg-[var(--gold-light)] font-['Montserrat'] self-end">

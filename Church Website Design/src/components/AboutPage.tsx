@@ -39,13 +39,13 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
               Unlimited Grace and Mercy Worldwide Mission Inc. was founded on a simple but powerful
               truth: God's grace knows no limits. Born out of a divine mandate to spread the
               transforming power of the gospel, our church has grown into a vibrant community of
-              believers in Oyo State, Nigeria.
+              believers.
             </p>
             <p>
               We are more than a church; we are a family united by faith, bound by love, and driven
               by a passion to see lives transformed through the unlimited grace and mercy of God. Our
               journey began with a small gathering of faithful believers who dared to believe that God
-              could do exceedingly abundantly above all they could ask or think.
+              could do exceedingly abundantly above all they could ask or think (Ephesians 3:20 - 21).
             </p>
             <p>
               Today, we continue to witness God's faithfulness as He adds to our number daily those
@@ -265,6 +265,9 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
               <p className="text-gray-600 font-['Merriweather']">
                 We believe in the universal Church, the body of Christ, and the local church as God's
                 plan for fellowship and growth.
+              </p>
+              <p className="text-gray-600 font-['Merriweather'] mt-3">
+                It is the responsibility of all members to live for JESUS CHRIST and win souls for His kingdom.
               </p>
             </Card>
 

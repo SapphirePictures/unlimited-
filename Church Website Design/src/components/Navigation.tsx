@@ -67,6 +67,14 @@ export function Navigation({ currentPage = 'home', onNavigate }: NavigationProps
               About
             </button>
             <button
+              onClick={() => handleNavClick('watch-live')}
+              className={`${currentPage === 'home' && !isScrolled ? 'text-white' : isScrolled ? 'text-white' : 'text-black'} hover:text-[var(--gold)] transition-colors font-['Montserrat'] ${
+                currentPage === 'watch-live' ? 'text-[var(--gold)]' : ''
+              }`}
+            >
+              Watch Live
+            </button>
+            <button
               onClick={() => handleNavClick('events')}
               className={`${currentPage === 'home' && !isScrolled ? 'text-white' : isScrolled ? 'text-white' : 'text-black'} hover:text-[var(--gold)] transition-colors font-['Montserrat'] ${
                 currentPage === 'events' ? 'text-[var(--gold)]' : ''
@@ -97,14 +105,6 @@ export function Navigation({ currentPage = 'home', onNavigate }: NavigationProps
               }`}
             >
               Service Times
-            </button>
-            <button
-              onClick={() => handleNavClick('temporary-dashboard')}
-              className={`${currentPage === 'home' && !isScrolled ? 'text-white' : isScrolled ? 'text-white' : 'text-black'} hover:text-[var(--gold)] transition-colors font-['Montserrat'] ${
-                currentPage === 'temporary-dashboard' ? 'text-[var(--gold)]' : ''
-              }`}
-            >
-              Temporary Dashboard
             </button>
             <Button
               onClick={() => handleNavClick('giving')}
@@ -146,6 +146,14 @@ export function Navigation({ currentPage = 'home', onNavigate }: NavigationProps
                 About
               </button>
               <button
+                onClick={() => handleNavClick('watch-live')}
+                className={`text-white hover:text-[var(--gold)] transition-colors text-left font-['Montserrat'] ${
+                  currentPage === 'watch-live' ? 'text-[var(--gold)]' : ''
+                }`}
+              >
+                Watch Live
+              </button>
+              <button
                 onClick={() => handleNavClick('events')}
                 className={`text-white hover:text-[var(--gold)] transition-colors text-left font-['Montserrat'] ${
                   currentPage === 'events' ? 'text-[var(--gold)]' : ''
@@ -176,14 +184,6 @@ export function Navigation({ currentPage = 'home', onNavigate }: NavigationProps
                 }`}
               >
                 Service Times
-              </button>
-              <button
-                onClick={() => handleNavClick('temporary-dashboard')}
-                className={`text-white hover:text-[var(--gold)] transition-colors text-left font-['Montserrat'] ${
-                  currentPage === 'temporary-dashboard' ? 'text-[var(--gold)]' : ''
-                }`}
-              >
-                Temporary Dashboard
               </button>
               <Button
                 onClick={() => handleNavClick('giving')}

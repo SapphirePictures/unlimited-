@@ -23,7 +23,7 @@ export function Footer({ onNavigate }: FooterProps) {
               Unlimited Grace and Mercy
             </h3>
             <p className="text-white/80 mb-4 font-['Merriweather']">
-              A gathering of souls enjoying the unlimited grace of God. Based in Oyo State, Nigeria.
+              A gathering of souls enjoying the unlimited grace and mercy of God.
             </p>
           </div>
 
